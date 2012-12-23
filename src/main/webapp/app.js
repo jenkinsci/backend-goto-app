@@ -4,37 +4,7 @@ require.config({
   }
 });
 
-require(['text!recipe.html'],function(recipeHtml) {
-    var Recipe = Backbone.Stapler.model({
-        initialize: function(){
-        },
-
-        urlRoot: 'recipes',
-
-        vote: Backbone.Stapler.makeJavaScriptProxyCall("vote"),
-
-        defaults: {
-            author: null,
-            title: null
-        }
-    });
-
-    var RecipeList = Backbone.Collection.extend({
-        model: Recipe,
-        url: '/recipes'
-    });
-
-    var RecipeView = Backbone.View.extend({
-        tagName: "div",
-        className: "recipe",
-        template: recipeHtml,
-        render: function () {
-            var tmpl = _.template(this.template);
-            this.$el.html(tmpl(this.model.toJSON()));
-            return this;
-        }
-    });
-
+require(['recipe/list','recipe/view'],function(RecipeList,RecipeView) {
     var AppView = Backbone.View.extend({
         initialize: function() {
             this.recipes = new RecipeList();
@@ -63,5 +33,5 @@ require(['text!recipe.html'],function(recipeHtml) {
         }
     });
 
-    new AppView();
+    var app = new AppView();
 });

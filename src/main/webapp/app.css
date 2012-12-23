@@ -1,0 +1,8 @@
+#recipes {
+    list-style: none;
+    padding-left: 2em;
+}
+
+LI.recipe:hover {
+    background-color: #ddd;
+}
