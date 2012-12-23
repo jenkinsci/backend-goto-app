@@ -67,7 +67,7 @@ public abstract class ResourceCollection<T extends Resource,ID> implements Itera
     protected HttpResponse create(StaplerRequest req) throws IOException {
         T res = objectMapper.readValue(req.getReader(),resourceType);
         System.out.println(res);
-        return HttpResponses.ok();
+        return res;
     }
 
     public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {

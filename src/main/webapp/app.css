@@ -28,24 +28,41 @@ BODY {
     position:relative;
 }
 
-.installation .destroy {
+.installation .btn-group {
 	position: absolute;
 	right: 5px;
-	top: 20px;
+	top: 5px;
 	display: none;
 	cursor: pointer;
-	width: 20px;
-	height: 20px;
-	background: url(images/destroy.png) no-repeat;
 }
 
-.installation:hover .destroy {
-  	display: block;
+.installation:hover .btn-group {
+    display: block;
+}
+
+.installation .destroy {
+    color: #B94A48;
+
+    transition: color 200ms linear;
+    -moz-transition: color 200ms linear;
+    -o-transition: color 200ms linear;
+    -webkit-transition: color 200ms linear;
 }
 
 .installation .destroy:hover {
-  	/*background-position: 0 -20px;*/
-    color: red;
+    color: #DA4F49;
+}
+
+.installation.editing .view-mode {
+    display: none;
+}
+
+.installation .edit-mode {
+    display: none;
+}
+
+.installation.editing .edit-mode {
+    display: block;
 }
 
 #footer {

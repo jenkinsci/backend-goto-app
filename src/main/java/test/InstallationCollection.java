@@ -13,7 +13,7 @@ import java.util.Iterator;
 public class InstallationCollection extends ResourceCollection<Installation,Integer> {
     @Override
     protected Installation get(Integer id) {
-        return new Installation(id,"author"+id,"title"+id);
+        return new Installation(id,"http://foobar"+id+"/");
     }
 
     @Override

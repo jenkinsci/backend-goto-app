@@ -37,7 +37,9 @@ require(['installation/model','installation/list','installation/view'],function(
         },
 
         newForm: function() {
-            this.addOne(new Installation());
+            var i = new Installation();
+            this.addOne(i);
+            i.trigger("firstEdit");
         }
     });
 

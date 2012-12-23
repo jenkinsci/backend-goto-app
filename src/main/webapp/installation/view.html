@@ -1,3 +1,14 @@
-<div class="destroy">x</div>
-<h2><%=location%></h2>
-    bob
+<div class="btn-group">
+    <button class="btn edit">
+        <i class="icon-edit"></i>
+    </button>
+    <button class="btn destroy">
+        <i class="icon-trash"></i>
+    </button>
+</div>
+<div class="view-mode">
+    <h2><a href="<%=location%>"><%=location%></a></h2>
+</div>
+<div class="edit-mode">
+    <h2><input type="input" value="<%=location%>"/></h2>
+</div>

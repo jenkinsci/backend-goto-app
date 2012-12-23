@@ -10,39 +10,33 @@ import test.backbone.Resource;
 public class Installation extends Resource {
     @JsonProperty
     private int id;
-    private String author, title;
+    private String location;
 
     public Installation() {
     }
 
-    public Installation(int id, String author, String title) {
+    public Installation(int id, String location) {
         this.id = id;
-        this.author = author;
-        this.title = title;
+        this.location = location;
     }
 
-    public String getAuthor() {
-        return author;
+    public int getId() {
+        return id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getLocation() {
+        return location;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override
     public String toString() {
-        return "Recipe{" +
-                "author='" + author + '\'' +
-                ", id=" + id +
-                ", title='" + title + '\'' +
+        return "Installation{" +
+                "id=" + id +
+                ", url='" + location + '\'' +
                 '}';
     }
 
