@@ -2,7 +2,7 @@ define(['text!installation/view.html'],function(template) {
     return Backbone.View.extend({
         tagName: "div",
         className: "installation",
-        template: template,
+        template: _.template(template),
         events: {
             "click .destroy" : "destroy",
             "click .edit"    : "edit",
@@ -24,27 +24,32 @@ define(['text!installation/view.html'],function(template) {
         edit: function() {// enter the edit mode
             this.$el.addClass("editing");
             this.input.focus();
+            this.saving=false;
         },
         doneEdit: function() {
           var value = this.input.val();
           if (!value) {
             this.destroy();
           } else {
+            this.saving = true;
             this.model.save({location: value});
-            this.$el.removeClass("editing");
           }
         },
         doneEditIfEnter: function(e) {
             if (e.keyCode == 13) this.doneEdit();
+            if (e.keyCode == 27) this.cancelEdit();
         },
         cancelEdit: function() {
-            this.$el.removeClass("editing");
-            this.render()
+            if (this.model.isNew() && !this.saving)
+                this.destroy();
+            else {
+                this.$el.removeClass("editing");
+                this.render(); // go back to the view mode
+            }
         },
 
         render: function() {
-            var tmpl = _.template(this.template);
-            this.$el.html(tmpl(this.model.toJSON()));
+            this.$el.html(this.template(this.model.toJSON()));
             this.input = this.$('INPUT');
             return this;
         },

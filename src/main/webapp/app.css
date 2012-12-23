@@ -26,6 +26,8 @@ BODY {
 
 .installation {
     position:relative;
+    height: 52px;
+    padding-top: 8px;
 }
 
 .installation .btn-group {
@@ -63,6 +65,12 @@ BODY {
 
 .installation.editing .edit-mode {
     display: block;
+}
+
+.installation .view-mode, .installation .view-mode INPUT,
+.installation .edit-mode, .installation .edit-mode INPUT {
+    font-size: 36px;
+    line-height: 36px;
 }
 
 #footer {
