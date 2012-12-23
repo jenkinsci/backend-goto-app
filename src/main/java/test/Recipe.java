@@ -1,5 +1,6 @@
 package test;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
 import test.backbone.Resource;
 
@@ -7,13 +8,15 @@ import test.backbone.Resource;
  * @author Kohsuke Kawaguchi
  */
 public class Recipe extends Resource {
+    @JsonProperty
     private int id;
     private String author, title;
 
     public Recipe() {
     }
 
-    public Recipe(String author, String title) {
+    public Recipe(int id, String author, String title) {
+        this.id = id;
         this.author = author;
         this.title = title;
     }

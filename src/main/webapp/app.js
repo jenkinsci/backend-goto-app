@@ -51,6 +51,11 @@ require(['text!recipe.html'],function(recipeHtml) {
         addOne: function(recipe) {
             var view = new RecipeView({model: recipe});
             this.$("#recipes").append(view.render().el);
+
+            // example of calling the vote method on the server-side
+            recipe.vote(1,2,function (r) {
+                console.log("voted "+r);
+            });
         },
 
         addAll: function() {

@@ -44,7 +44,10 @@ public abstract class ResourceCollection<T extends Resource,ID> implements Itera
 
         objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.configure(DeserializationConfig.Feature.AUTO_DETECT_SETTERS, false);
+        // these three lines weren't enough to automatically pick up private fields for persistence
+//        objectMapper.configure(DeserializationConfig.Feature.AUTO_DETECT_SETTERS, false);
+//        objectMapper.configure(DeserializationConfig.Feature.AUTO_DETECT_FIELDS, true);
+//        objectMapper.configure(DeserializationConfig.Feature.CAN_OVERRIDE_ACCESS_MODIFIERS, true);
     }
 
     public ResourceCollection() {
@@ -89,14 +92,12 @@ public abstract class ResourceCollection<T extends Resource,ID> implements Itera
 
     /**
      * If the given token is a valid ID, return its ID value.
+     *
+     * @return
+     *      null if the conversion fails.
      */
-    protected ID toID(String token) {
-        try {
-            return idType.cast(ConvertUtils.convert(token,idType));
-        } catch (ConversionException e) {
-            return null;
-        }
-    }
+    protected abstract ID toID(String token);
+    // commons-beanutils was too lax in acceping everything
 
     /**
      * Called when a resource in this collection is updated.

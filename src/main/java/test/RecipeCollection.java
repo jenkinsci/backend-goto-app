@@ -13,7 +13,7 @@ import java.util.Iterator;
 public class RecipeCollection extends ResourceCollection<Recipe,Integer> {
     @Override
     protected Recipe get(Integer id) {
-        return new Recipe("author"+id,"title"+id);
+        return new Recipe(id,"author"+id,"title"+id);
     }
 
     @Override
@@ -29,5 +29,14 @@ public class RecipeCollection extends ResourceCollection<Recipe,Integer> {
 
     public Iterator<Recipe> iterator() {
         return Arrays.asList(get(1),get(2),get(3)).iterator();
+    }
+
+    @Override
+    protected Integer toID(String token) {
+        try {
+            return Integer.parseInt(token);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }
