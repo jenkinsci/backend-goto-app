@@ -1,7 +1,5 @@
 package test.backbone;
 
-import org.apache.commons.beanutils.ConversionException;
-import org.apache.commons.beanutils.ConvertUtils;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jvnet.tiger_types.Types;
@@ -9,6 +7,7 @@ import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
+import test.Installation;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -64,11 +63,10 @@ public abstract class ResourceCollection<T extends Resource,ID> implements Itera
         return HttpResponses.ok();
     }
 
-    protected HttpResponse create(StaplerRequest req) throws IOException {
-        T res = objectMapper.readValue(req.getReader(),resourceType);
-        System.out.println(res);
-        return res;
-    }
+    /**
+     * Creates a new instance from the request, persists it, and return it.
+     */
+    protected abstract T create(StaplerRequest req) throws IOException;
 
     public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
         rsp.setContentType("application/json");
@@ -108,5 +106,8 @@ public abstract class ResourceCollection<T extends Resource,ID> implements Itera
     /**
      * Called to delete a resource in this collection.
      */
-    public abstract HttpResponse delete(T resource);
+    public HttpResponse delete(T resource) throws IOException {
+        resource.destroy();
+        return HttpResponses.ok();
+    }
 }

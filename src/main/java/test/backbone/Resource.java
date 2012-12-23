@@ -12,7 +12,9 @@ import java.io.IOException;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class Resource implements HttpResponse {
+public abstract class Resource implements HttpResponse {
+    // TODO: this should have a parent
+
     public HttpResponse doIndex(StaplerRequest request) throws IOException {
         String m = request.getMethod();
         if (m.equals("GET"))
@@ -31,9 +33,15 @@ public class Resource implements HttpResponse {
 
     protected HttpResponse _put(StaplerRequest request) throws IOException {
         getMapper(request).readerForUpdating(this).readValue(request.getReader());
+        persist();
         getParent(request).onUpdated(this);
         return HttpResponses.ok();
     }
+
+    /**
+     * Persists this object. Called when updated.
+     */
+    protected abstract void persist() throws IOException;
 
     protected HttpResponse _delete(StaplerRequest request) throws IOException {
         return getParent(request).delete(this);
@@ -52,4 +60,6 @@ public class Resource implements HttpResponse {
     private ResourceCollection getParent(StaplerRequest req) {
         return req.findAncestorObject(ResourceCollection.class);
     }
+
+    public abstract void destroy() throws IOException;
 }

@@ -1,25 +1,52 @@
 package test;
 
-import org.kohsuke.stapler.HttpResponse;
-import org.kohsuke.stapler.HttpResponses;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.kohsuke.stapler.StaplerRequest;
 import test.backbone.ResourceCollection;
 
-import java.util.Arrays;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  * @author Kohsuke Kawaguchi
  */
-public class InstallationCollection extends ResourceCollection<Installation,Integer> {
-    @Override
-    protected Installation get(Integer id) {
-        return new Installation(id,"http://foobar"+id+"/");
+public class InstallationCollection extends ResourceCollection<Installation,String> {
+    public final File root;
+
+    public InstallationCollection(File root) {
+        this.root = root;
+        root.mkdirs();
+    }
+
+    public ObjectMapper getMapper() {
+        return objectMapper;
     }
 
     @Override
-    public HttpResponse delete(Installation resource) {
-        System.out.println("Deleted "+resource);
-        return HttpResponses.ok();
+    protected Installation create(StaplerRequest req) throws IOException {
+        Installation inst = objectMapper.readerForUpdating(new Installation(this)).readValue(req.getReader());
+        inst.persist();
+        return inst;
+    }
+
+    @Override
+    protected Installation get(String id) {
+        File dir = new File(root,id);
+        if (dir.isDirectory())
+            try {
+                return new Installation(this,dir);
+            } catch (IOException e) {
+                LOGGER.log(Level.WARNING, "Failed to load "+dir,e);
+            }
+
+        return null;
     }
 
     @Override
@@ -28,15 +55,30 @@ public class InstallationCollection extends ResourceCollection<Installation,Inte
     }
 
     public Iterator<Installation> iterator() {
-        return Arrays.asList(get(1),get(2),get(3)).iterator();
+        File[] dirs = root.listFiles(new FileFilter() {
+            public boolean accept(File f) {
+                return f.isDirectory();
+            }
+        });
+        List<Installation> installations = new ArrayList<Installation>();
+        if (dirs!=null) {
+            for (File d : dirs) {
+                Installation v = get(d.getName());
+                if (v!=null)
+                    installations.add(v);
+            }
+        }
+        return installations.iterator();
     }
 
     @Override
-    protected Integer toID(String token) {
-        try {
-            return Integer.parseInt(token);
-        } catch (NumberFormatException e) {
-            return null;
-        }
+    protected String toID(String token) {
+        if (ID_PATTERN.matcher(token).matches())
+            return token;
+        else
+            return null;    // invalid key
     }
+
+    private static final Logger LOGGER = Logger.getLogger(InstallationCollection.class.getName());
+    private static final Pattern ID_PATTERN = Pattern.compile("[0-9a-f]+");
 }
