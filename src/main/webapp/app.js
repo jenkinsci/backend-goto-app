@@ -4,10 +4,14 @@ require.config({
   }
 });
 
-require(['recipe/list','recipe/view'],function(RecipeList,RecipeView) {
+require(['installation/model','installation/list','installation/view'],function(Installation,InstallationList,InstallationView) {
     var AppView = Backbone.View.extend({
+        events: {
+            "click .add" : "newForm"
+        },
+
         initialize: function() {
-            this.recipes = new RecipeList();
+            this.recipes = new InstallationList();
             this.listenTo(this.recipes, 'add', this.addOne);
             this.listenTo(this.recipes, 'reset', this.addAll);
             this.listenTo(this.recipes, 'all', this.render);
@@ -19,8 +23,8 @@ require(['recipe/list','recipe/view'],function(RecipeList,RecipeView) {
         },
 
         addOne: function(recipe) {
-            var view = new RecipeView({model: recipe});
-            this.$("#recipes").append(view.render().el);
+            var view = new InstallationView({model: recipe});
+            $("#installations").append(view.render().el);
 
             // example of calling the vote method on the server-side
             recipe.vote(1,2,function (r) {
@@ -29,9 +33,13 @@ require(['recipe/list','recipe/view'],function(RecipeList,RecipeView) {
         },
 
         addAll: function() {
-            this.recipes.each(this.addOne);
+            this.recipes.each(this.addOne.bind(this));
+        },
+
+        newForm: function() {
+            this.addOne(new Installation());
         }
     });
 
-    var app = new AppView();
+    new AppView({el:$("#content")});
 });

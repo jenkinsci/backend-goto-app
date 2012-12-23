@@ -10,7 +10,7 @@ import javax.servlet.ServletContext;
 public class Application {
     public final AdjunctManager adjuncts;
 
-    public final RecipeCollection recipes = new RecipeCollection();
+    public final InstallationCollection installations = new InstallationCollection();
 
     public Application(ServletContext context) {
         this.adjuncts = new AdjunctManager(context,getClass().getClassLoader(),"adjuncts");

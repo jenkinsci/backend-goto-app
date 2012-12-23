@@ -1,8 +1,67 @@
-#recipes {
-    list-style: none;
-    padding-left: 2em;
+BODY {
+    background-color: #eee;
 }
 
-LI.recipe:hover {
-    background-color: #ddd;
+#content {
+    box-shadow: 0 0 8px -2px black;
+    border-radius: 0 0 5px 5px;
+    background-color: white;
 }
+
+#content > H1 {
+    text-align: center;
+}
+
+#installations {
+    padding: 0px 16px;
+}
+
+.installation {
+    border-bottom: solid 1px #ccc;
+}
+
+.installation:last-child {
+    border-bottom: none;
+}
+
+.installation {
+    position:relative;
+}
+
+.installation .destroy {
+	position: absolute;
+	right: 5px;
+	top: 20px;
+	display: none;
+	cursor: pointer;
+	width: 20px;
+	height: 20px;
+	background: url(images/destroy.png) no-repeat;
+}
+
+.installation:hover .destroy {
+  	display: block;
+}
+
+.installation .destroy:hover {
+  	/*background-position: 0 -20px;*/
+    color: red;
+}
+
+#footer {
+    border-radius: 0 0 5px 5px;
+    padding: 16px 16px;
+}
+
+/* Playing with background color animation
+.installation {
+    transition: background-color 200ms linear;
+    -moz-transition: background-color 200ms linear;
+    -o-transition: background-color 200ms linear;
+    -webkit-transition: background-color 200ms linear;
+}
+
+.installation:hover {
+     background-color: #eee;
+}
+*/

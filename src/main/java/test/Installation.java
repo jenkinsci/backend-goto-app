@@ -7,15 +7,15 @@ import test.backbone.Resource;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class Recipe extends Resource {
+public class Installation extends Resource {
     @JsonProperty
     private int id;
     private String author, title;
 
-    public Recipe() {
+    public Installation() {
     }
 
-    public Recipe(int id, String author, String title) {
+    public Installation(int id, String author, String title) {
         this.id = id;
         this.author = author;
         this.title = title;

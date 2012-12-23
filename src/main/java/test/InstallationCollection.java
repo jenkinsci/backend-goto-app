@@ -10,24 +10,24 @@ import java.util.Iterator;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class RecipeCollection extends ResourceCollection<Recipe,Integer> {
+public class InstallationCollection extends ResourceCollection<Installation,Integer> {
     @Override
-    protected Recipe get(Integer id) {
-        return new Recipe(id,"author"+id,"title"+id);
+    protected Installation get(Integer id) {
+        return new Installation(id,"author"+id,"title"+id);
     }
 
     @Override
-    public HttpResponse delete(Recipe resource) {
+    public HttpResponse delete(Installation resource) {
         System.out.println("Deleted "+resource);
         return HttpResponses.ok();
     }
 
     @Override
-    public void onUpdated(Recipe resource) {
+    public void onUpdated(Installation resource) {
         System.out.println("Updated to " + resource);
     }
 
-    public Iterator<Recipe> iterator() {
+    public Iterator<Installation> iterator() {
         return Arrays.asList(get(1),get(2),get(3)).iterator();
     }
 

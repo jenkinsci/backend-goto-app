@@ -3,13 +3,12 @@ define([],function() {
         initialize: function(){
         },
 
-        urlRoot: 'recipes',
+        urlRoot: 'installations',
 
         vote: Backbone.Stapler.makeJavaScriptProxyCall("vote"),
 
         defaults: {
-            author: null,
-            title: null
+            location: null
         }
     });
 });
