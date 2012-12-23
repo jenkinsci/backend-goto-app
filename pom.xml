@@ -21,6 +21,11 @@
     </dependency>
     <dependency>
       <groupId>org.kohsuke.stapler</groupId>
+      <artifactId>stapler-adjunct-bootstrap</artifactId>
+      <version>2.2.1-1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.kohsuke.stapler</groupId>
       <artifactId>stapler-adjunct-backbone</artifactId>
       <version>0.9.9-1-SNAPSHOT</version>
     </dependency>

@@ -1,14 +1,13 @@
-define(['text!recipe/view.html'],function(template) {
+define(['text!recipe/detail.html'],function(template) {
     return Backbone.View.extend({
-        tagName: "li",
-        className: "recipe",
-        template: template,
+        tagName: "div",
+        className: "detail",
+        template: _.template(template),
         events: {
             "click H1" : "shiftLeft"
         },
         render: function () {
-            var tmpl = _.template(this.template);
-            this.$el.html(tmpl(this.model.toJSON()));
+            this.$el.html(template(this.model.toJSON()));
             return this;
         },
         shiftLeft: function() {
