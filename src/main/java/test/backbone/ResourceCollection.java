@@ -7,7 +7,6 @@ import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
-import test.Installation;
 
 import javax.servlet.ServletException;
 import java.io.IOException;

@@ -8,7 +8,7 @@ import java.io.Writer;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class NoCloseWriter extends ProxyWriter {
+class NoCloseWriter extends ProxyWriter {
     public NoCloseWriter(Writer proxy) {
         super(proxy);
     }

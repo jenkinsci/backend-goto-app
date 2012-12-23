@@ -13,7 +13,6 @@ import java.io.IOException;
  * @author Kohsuke Kawaguchi
  */
 public abstract class Resource implements HttpResponse {
-    // TODO: this should have a parent
 
     public HttpResponse doIndex(StaplerRequest request) throws IOException {
         String m = request.getMethod();
