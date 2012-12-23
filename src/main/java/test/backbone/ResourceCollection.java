@@ -8,14 +8,17 @@ import org.jvnet.tiger_types.Types;
 import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
 
+import javax.servlet.ServletException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Type;
 
 /**
  * @author Kohsuke Kawaguchi
  */
-public abstract class ResourceCollection<T extends Resource,ID> {
+public abstract class ResourceCollection<T extends Resource,ID> implements Iterable<T>, HttpResponse {
     /**
      * What's the type of the resource?
      */
@@ -49,9 +52,11 @@ public abstract class ResourceCollection<T extends Resource,ID> {
     }
 
     public HttpResponse doIndex(StaplerRequest req) throws IOException {
-        if (req.getMethod().equals("POST")) {
+        String method = req.getMethod();
+        if (method.equals("POST"))
             return create(req);
-        }
+        if (method.equals("GET"))
+            return this;
 
         return HttpResponses.ok();
     }
@@ -61,6 +66,20 @@ public abstract class ResourceCollection<T extends Resource,ID> {
         System.out.println(res);
         return HttpResponses.ok();
     }
+
+    public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
+        rsp.setContentType("application/json");
+        PrintWriter w = rsp.getWriter();
+        w.println("[");
+        boolean first = true;
+        for (T item : this) {
+            if (!first)     w.println(",");
+            else            first = false;
+            objectMapper.writeValue(new NoCloseWriter(w),item);
+        }
+        w.println("]");
+    }
+
 
     protected abstract T get(ID id);
 
