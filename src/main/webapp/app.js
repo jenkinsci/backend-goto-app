@@ -5,29 +5,27 @@ require.config({
   }
 });
 
-require(['installation','text!/adjuncts/webApp/crumbIssuer/crumb','org/kohsuke/stapler/uri/URI','add-dialog'],
-    function(Installation,crumb,URI,addDialog) {
+require(['installation','text!/adjuncts/webApp/crumbIssuer/crumb','org/kohsuke/stapler/uri/URI','add-dialog','text!app.html'],
+    function(Installation,crumb,URI,addDialog,appTemplate) {
     window.crumb = crumb.trim();
 
     var AppView = Backbone.View.extend({
         events: {
             "click .add" : "newForm"
         },
+        title: "Your Jenkins installations",
 
-        initialize: function() {
+        start: function() {
+            this.$el.html(_.template(appTemplate)(this));
             this.installations = new Installation.List();
             this.listenTo(this.installations, 'add', this.addOne);
             this.listenTo(this.installations, 'reset', this.addAll);
-            this.listenTo(this.installations, 'all', this.render);
+//            this.listenTo(this.installations, 'all', this.render);
             this.installations.fetch();
         },
 
-        render: function() {
-            // TODO: update headers/footers if any of them depend on the collection
-        },
-
         addOne: function(i) {
-            var view = new Installation.View({model: i});
+            var view = new Installation.View({model: i, go:this.go});
             $("#installations").append(view.render().el);
 
             // example of calling the vote method on the server-side
@@ -44,18 +42,28 @@ require(['installation','text!/adjuncts/webApp/crumbIssuer/crumb','org/kohsuke/s
             var i = new Installation.Model();
             this.addOne(i);
             i.trigger("firstEdit");
+        },
+
+        enterGoMode: function(loc) {
+            // enter into the model that lets the user select the Jenkins instance and go to the specific URL within it
+            // this method needs to be called before start()
+            this.title = "Choose Jenkins instance";
+            this.go = loc;
         }
     });
 
-    window.app = new AppView({el:$("#content")});
+    var app = new AppView({el:$("#content")});
 
 
-    function handleQueryString() {
-        var uri = new URI(window.location);
-        var commands = uri.query(true);
+    (function () {// handle commands in the query string
+        var commands = new URI(window.location).query(true);
         if (commands.add) {
             addDialog(new Installation.Model({location:commands.add}));
         }
-    }
-    handleQueryString();
+        if (commands.go) {
+            app.enterGoMode(commands.go);
+        }
+    })();
+
+    app.start();
 });

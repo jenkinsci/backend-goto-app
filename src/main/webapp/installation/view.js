@@ -9,8 +9,9 @@ define(['text!installation/view.html'],function(template) {
             "blur INPUT"     : "cancelEdit",
             "keyup INPUT"    : "doneEditIfEnter"
         },
-        initialize: function() {
+        initialize: function(opts) {
             var view = this;
+            this.go = opts.go;
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'firstEdit', this.edit);
             this.listenTo(this.model, 'destroy', function(){
@@ -48,7 +49,7 @@ define(['text!installation/view.html'],function(template) {
             }
         },
         render: function() {
-            this.$el.html(this.template(this.model.toJSON()));
+            this.$el.html(this.template(_.extend({go:this.go},this.model.toJSON())));
             this.input = this.$('INPUT');
             return this;
         },

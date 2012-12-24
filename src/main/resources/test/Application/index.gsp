@@ -12,16 +12,7 @@
 
 <body>
 <div class="row-fluid">
-    <div id="content" class="span10 offset1">
-        <h1>Your Jenkins installations</h1>
-        <div id="installations">
-        </div>
-        <div id="footer">
-            <a  class="add btn btn-primary">
-                <i class="icon-plus"></i> Add
-            </a>
-        </div>
-    </div>
+    <div id="content" class="span10 offset1" />
 </div>
 </body>
 </html>
