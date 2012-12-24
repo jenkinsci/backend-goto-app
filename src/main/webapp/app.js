@@ -40,7 +40,7 @@ require(['installation','text!/adjuncts/webApp/crumbIssuer/crumb','org/kohsuke/s
         },
 
         newForm: function() {
-            var i = new Installation.Model();
+            var i = new Installation.Model({location:""});
             this.addOne(i);
             i.trigger("firstEdit");
         },

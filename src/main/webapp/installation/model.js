@@ -7,10 +7,8 @@ define([],function() {
 
         vote: Backbone.Stapler.makeJavaScriptProxyCall("vote"),
 
-        defaults: {
-            location: null
-        },
         validate: function (attrs) {
+            if (attrs.location==null || attrs.location=="")   return null;    // undefined value (to be removed)
             if (typeof(attrs.location)!="string" || !attrs.location.match(/^https?:\/\//))
                 return "Not an absolute URL";
             return null;
