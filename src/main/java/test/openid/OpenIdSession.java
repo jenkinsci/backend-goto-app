@@ -30,11 +30,8 @@ public class OpenIdSession {
     public OpenIdSession(ConsumerManager manager, String openid, StaplerRequest req) throws OpenIDException, IOException {
         this.manager = manager;
 
-        List discoveries = manager.discover(openid); // somehow this hangs
+        List discoveries = manager.discover(openid);
         endpoint = manager.associate(discoveries);
-//        endpoint = manager.associate(Collections.singletonList(
-//            new DiscoveryInformation(new URL("https://jenkins-ci.org/account/openid/entryPoint"),new UrlIdentifier("http://jenkins-ci.org/account/openid/"),DiscoveryInformation.OPENID10)
-//        ));
 
         StringBuffer buf = req.getRequestURL();
         buf.setLength(buf.length() - req.getRequestURI().length());
@@ -43,11 +40,21 @@ public class OpenIdSession {
     }
 
     /**
+     * If the user is already authenticated, return the identity information.
+     * Otherwise start an authentication session.
+     */
+    public User authenticate() {
+        if (nick==null)
+            commence();     // this redirects the user and will never return
+        return new User(nick);
+    }
+
+    /**
      * Starts the login session.
      */
     public void commence() {
         try {
-            this.from = requestUri(Stapler.getCurrentRequest());
+            this.from = Stapler.getCurrentRequest().getRequestURIWithQueryString();
             final AuthRequest authReq = manager.authenticate(endpoint, finishUrl);
 
             SRegRequest sregReq = SRegRequest.createFetchRequest();
@@ -67,20 +74,6 @@ public class OpenIdSession {
         }
     }
 
-    String requestUri(StaplerRequest req) {
-        StringBuilder from = new StringBuilder(req.getRequestURI());
-        if (req.getQueryString()!=null)
-            from.append('?').append(req.getQueryString());
-        return from.toString();
-    }
-
-    String requestUrl(StaplerRequest req) {
-        StringBuffer from = req.getRequestURL();
-        if (req.getQueryString()!=null)
-            from.append('?').append(req.getQueryString());
-        return from.toString();
-    }
-
     /**
      * When the identity provider is done with its thing, the user comes back here.
      */
@@ -90,7 +83,7 @@ public class OpenIdSession {
         ParameterList responselist = new ParameterList(request.getParameterMap());
 
         // verify the process
-        VerificationResult verification = manager.verify(requestUrl(request), responselist, endpoint);
+        VerificationResult verification = manager.verify(request.getRequestURLWithQueryString().toString(), responselist, endpoint);
 
         // examine the verification result and extract the verified identifier
         Identifier verified = verification.getVerifiedId();
@@ -105,16 +98,6 @@ public class OpenIdSession {
         this.nick = sr.getAttributeValue("nickname");
 
         return HttpResponses.redirectTo(from);
-    }
-
-    public boolean isAuthenticated() {
-        return nick!=null;
-    }
-
-    public User authenticate() {
-        if (nick==null)
-            commence();     // this redirects the user and will never return
-        return new User(nick);
     }
 
     private static final String SESSION_NAME = OpenIdSession.class.getName();
