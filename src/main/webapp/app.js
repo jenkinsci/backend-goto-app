@@ -5,8 +5,8 @@ require.config({
   }
 });
 
-require(['installation','text!/adjuncts/webApp/crumbIssuer/crumb','org/kohsuke/stapler/uri/URI','route'],
-    function(Installation,crumb,URI,route) {
+require(['installation','text!/adjuncts/webApp/crumbIssuer/crumb','org/kohsuke/stapler/uri/URI','add-dialog'],
+    function(Installation,crumb,URI,addDialog) {
     window.crumb = crumb.trim();
 
     var AppView = Backbone.View.extend({
@@ -54,7 +54,7 @@ require(['installation','text!/adjuncts/webApp/crumbIssuer/crumb','org/kohsuke/s
         var uri = new URI(window.location);
         var commands = uri.query(true);
         if (commands.add) {
-            route.add(commands.add);
+            addDialog(new Installation.Model({location:commands.add}));
         }
     }
     handleQueryString();
