@@ -1,6 +1,7 @@
 package test;
 
 import org.kohsuke.stapler.framework.AbstractWebAppMain;
+import test.openid.AuthenticationShell;
 
 import javax.servlet.ServletContextEvent;
 
@@ -25,6 +26,6 @@ public class WebAppMain extends AbstractWebAppMain<Application> {
 
     @Override
     protected Object createApplication() throws Exception {
-        return new Application(context);
+        return new AuthenticationShell(new Application(context));
     }
 }

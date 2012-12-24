@@ -11,10 +11,11 @@ import java.io.File;
 public class Application {
     public final AdjunctManager adjuncts;
 
-    public final InstallationCollection installations;
-
     public Application(ServletContext context) {
         this.adjuncts = new AdjunctManager(context,getClass().getClassLoader(),"adjuncts");
-        installations = new InstallationCollection(new File("./data"));
+    }
+
+    public InstallationCollection getInstallations() {
+        return new InstallationCollection(User.current().getRootDir());
     }
 }
