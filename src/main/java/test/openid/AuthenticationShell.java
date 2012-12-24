@@ -30,8 +30,10 @@ public class AuthenticationShell implements StaplerFallback {
     }
 
     public Object getStaplerFallback() {
-        User user = currentSession().authenticate();
-        user.associateToRequest(Stapler.getCurrentRequest());
+//        User user = currentSession().authenticate();
+//        user.associateToRequest(Stapler.getCurrentRequest());
+
+        new User("kohsuke").associateToRequest(Stapler.getCurrentRequest()); // fake during debug
         return delegate;
     }
 

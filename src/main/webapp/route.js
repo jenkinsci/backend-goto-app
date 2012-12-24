@@ -1,4 +1,4 @@
-define(["text!add-dialog.html","installation/model"], function (dialogTemplate,InstallationModel) {
+define(["text!add-dialog.html","installation/model",'org/kohsuke/stapler/uri/URI'], function (dialogTemplate,InstallationModel,URI) {
     var DialogView = Backbone.View.extend({
         template: _.template(dialogTemplate),
         className: "modal hide fade",
@@ -16,7 +16,11 @@ define(["text!add-dialog.html","installation/model"], function (dialogTemplate,I
             this.$el.modal();
             this.$el.on('hidden',function() {
                 this.remove();
-                route.navigate('');
+
+                // when the user is done selecting, get rid of the query string from the address
+                // to improve bookmarkability
+                if (history.replaceState)
+                    history.replaceState({},document.title,new URI(window.location).query("").toString());
             }.bind(this))
         },
         accept: function() {
@@ -32,12 +36,16 @@ define(["text!add-dialog.html","installation/model"], function (dialogTemplate,I
             "add": "add"
         },
 
-        add: function () {
-            var i = new InstallationModel({location:window.location.search.substring(1)});
+        add: function (location) {
+            if (!location)
+                location = window.location.search.substring(1); // when invoked as route
+            var i = new InstallationModel({location:location});
             if (i._validate()) // if the location isn't valid, don't even bother showing the dialog
                 new DialogView({model:i}).show();
         }
     });
     var route = new Workspace();
-    Backbone.history.start();
-})
+    Backbone.history.start({pushState:true});
+
+    return route;
+});

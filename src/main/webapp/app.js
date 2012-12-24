@@ -1,10 +1,12 @@
 require.config({
   paths: {
-      "text": "adjuncts/org/kohsuke/stapler/require/text"
+      "text": "adjuncts/org/kohsuke/stapler/require/text",
+      "org/kohsuke/stapler": "adjuncts/org/kohsuke/stapler"
   }
 });
 
-require(['installation/model','installation/list','installation/view','text!/adjuncts/webApp/crumbIssuer/crumb','route'],function(Installation,InstallationList,InstallationView,crumb) {
+require(['installation','text!/adjuncts/webApp/crumbIssuer/crumb','org/kohsuke/stapler/uri/URI','route'],
+    function(Installation,crumb,URI,route) {
     window.crumb = crumb.trim();
 
     var AppView = Backbone.View.extend({
@@ -13,7 +15,7 @@ require(['installation/model','installation/list','installation/view','text!/adj
         },
 
         initialize: function() {
-            this.installations = new InstallationList();
+            this.installations = new Installation.List();
             this.listenTo(this.installations, 'add', this.addOne);
             this.listenTo(this.installations, 'reset', this.addAll);
             this.listenTo(this.installations, 'all', this.render);
@@ -25,7 +27,7 @@ require(['installation/model','installation/list','installation/view','text!/adj
         },
 
         addOne: function(i) {
-            var view = new InstallationView({model: i});
+            var view = new Installation.View({model: i});
             $("#installations").append(view.render().el);
 
             // example of calling the vote method on the server-side
@@ -39,11 +41,21 @@ require(['installation/model','installation/list','installation/view','text!/adj
         },
 
         newForm: function() {
-            var i = new Installation();
+            var i = new Installation.Model();
             this.addOne(i);
             i.trigger("firstEdit");
         }
     });
 
     window.app = new AppView({el:$("#content")});
+
+
+    function handleQueryString() {
+        var uri = new URI(window.location);
+        var commands = uri.query(true);
+        if (commands.add) {
+            route.add(commands.add);
+        }
+    }
+    handleQueryString();
 });
