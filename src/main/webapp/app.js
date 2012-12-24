@@ -4,7 +4,9 @@ require.config({
   }
 });
 
-require(['installation/model','installation/list','installation/view','route'],function(Installation,InstallationList,InstallationView) {
+require(['installation/model','installation/list','installation/view','text!/adjuncts/webApp/crumbIssuer/crumb','route'],function(Installation,InstallationList,InstallationView,crumb) {
+    window.crumb = crumb.trim();
+
     var AppView = Backbone.View.extend({
         events: {
             "click .add" : "newForm"

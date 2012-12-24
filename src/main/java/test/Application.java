@@ -3,7 +3,6 @@ package test;
 import org.kohsuke.stapler.framework.adjunct.AdjunctManager;
 
 import javax.servlet.ServletContext;
-import java.io.File;
 
 /**
  * @author Kohsuke Kawaguchi

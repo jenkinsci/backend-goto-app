@@ -11,7 +11,6 @@
 </head>
 
 <body>
-<script>var crumb = "<%= org.kohsuke.stapler.WebApp.getCurrent().getCrumbIssuer().issueCrumb() %>";</script>
 <div class="row-fluid">
     <div id="content" class="span10 offset1">
         <h1>Your Jenkins installations</h1>
