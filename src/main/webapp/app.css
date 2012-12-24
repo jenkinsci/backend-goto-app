@@ -12,6 +12,10 @@ BODY {
     text-align: center;
 }
 
+.blurb {
+    text-align: center;
+}
+
 #installations {
     padding: 0px 16px;
 }

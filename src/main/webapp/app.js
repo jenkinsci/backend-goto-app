@@ -14,6 +14,7 @@ require(['installation','text!/adjuncts/webApp/crumbIssuer/crumb','org/kohsuke/s
             "click .add" : "newForm"
         },
         title: "Your Jenkins installations",
+        blurb: "",
 
         start: function() {
             this.$el.html(_.template(appTemplate)(this));
@@ -48,6 +49,7 @@ require(['installation','text!/adjuncts/webApp/crumbIssuer/crumb','org/kohsuke/s
             // enter into the model that lets the user select the Jenkins instance and go to the specific URL within it
             // this method needs to be called before start()
             this.title = "Choose Jenkins instance";
+            this.blurb = "You are about to go to <tt>"+ _.escape(loc)+"</tt> of your Jenkins";
             this.go = loc;
         }
     });
