@@ -4,36 +4,36 @@ require.config({
   }
 });
 
-require(['installation/model','installation/list','installation/view'],function(Installation,InstallationList,InstallationView) {
+require(['installation/model','installation/list','installation/view','route'],function(Installation,InstallationList,InstallationView) {
     var AppView = Backbone.View.extend({
         events: {
             "click .add" : "newForm"
         },
 
         initialize: function() {
-            this.recipes = new InstallationList();
-            this.listenTo(this.recipes, 'add', this.addOne);
-            this.listenTo(this.recipes, 'reset', this.addAll);
-            this.listenTo(this.recipes, 'all', this.render);
-            this.recipes.fetch();
+            this.installations = new InstallationList();
+            this.listenTo(this.installations, 'add', this.addOne);
+            this.listenTo(this.installations, 'reset', this.addAll);
+            this.listenTo(this.installations, 'all', this.render);
+            this.installations.fetch();
         },
 
         render: function() {
             // TODO: update headers/footers if any of them depend on the collection
         },
 
-        addOne: function(recipe) {
-            var view = new InstallationView({model: recipe});
+        addOne: function(i) {
+            var view = new InstallationView({model: i});
             $("#installations").append(view.render().el);
 
             // example of calling the vote method on the server-side
-            recipe.vote(1,2,function (r) {
+            i.vote(1,2,function (r) {
                 console.log("voted "+r);
             });
         },
 
         addAll: function() {
-            this.recipes.each(this.addOne.bind(this));
+            this.installations.each(this.addOne.bind(this));
         },
 
         newForm: function() {
@@ -43,5 +43,5 @@ require(['installation/model','installation/list','installation/view'],function(
         }
     });
 
-    new AppView({el:$("#content")});
+    window.app = new AppView({el:$("#content")});
 });

@@ -47,7 +47,6 @@ define(['text!installation/view.html'],function(template) {
                 this.render(); // go back to the view mode
             }
         },
-
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
             this.input = this.$('INPUT');

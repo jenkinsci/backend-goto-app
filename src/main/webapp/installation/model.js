@@ -9,6 +9,11 @@ define([],function() {
 
         defaults: {
             location: null
+        },
+        validate: function (attrs) {
+            if (typeof(attrs.location)!="string" || !attrs.location.match(/^https?:\/\//))
+                return "Not an absolute URL";
+            return null;
         }
     });
 });

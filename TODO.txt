@@ -1,0 +1,6 @@
+- Generalize OpenIdSession and push it off to a separate module
+  - add builder to let users decide which SReg & AX bits to add
+
+- Move Backbone/Stapler integration to a separate module
+
+- Add require.js/Stapler integration
