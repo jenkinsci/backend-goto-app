@@ -17,6 +17,10 @@ BODY {
     margin-bottom:2em;
 }
 
+.blurb TT {
+    font-weight: bold;
+}
+
 #installations {
     padding: 0px 16px;
 }
@@ -77,7 +81,10 @@ BODY {
     display: block;
     padding-top: 5px;
     padding-left: 7px;
-
+    white-space: nowrap;
+    height: 99px; /* as long as it's big enough to capture one line */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .installation .view-mode, .installation .edit-mode {
