@@ -14,6 +14,7 @@ define(['text!installation/view.html'],function(template) {
             this.go = opts.go;
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'firstEdit', this.edit);
+            this.listenTo(this.model, 'error', this.error);
             this.listenTo(this.model, 'destroy', function(){
                 $(view.$el).animate({opacity:0},200,function() {
                     $(view.$el).animate({height:0},200,function() {
@@ -27,14 +28,16 @@ define(['text!installation/view.html'],function(template) {
             this.input.focus();
             this.saving=false;
         },
-        doneEdit: function() {
-          var value = this.input.val();
-          if (!value) {
-            this.destroy();
-          } else {
-            this.saving = true;
-            this.model.save({location: value});
-          }
+        doneEdit: function () {
+            var value = this.input.val();
+            if (!value) {
+                this.destroy();
+                this.$el.removeClass("editing");
+            } else {
+                this.saving = true;
+                if (this.model.save({location: value}))
+                    this.$el.removeClass("editing");
+            }
         },
         doneEditIfEnter: function(e) {
             if (e.keyCode == 13) this.doneEdit();
@@ -52,6 +55,9 @@ define(['text!installation/view.html'],function(template) {
             this.$el.html(this.template(_.extend({go:this.go},this.model.toJSON())));
             this.input = this.$('INPUT');
             return this;
+        },
+        error: function() {
+            this.input.parents(".control-group").addClass("error");
         },
         destroy: function() {
             this.model.destroy();

@@ -41,6 +41,7 @@ BODY {
 	top: 5px;
 	display: none;
 	cursor: pointer;
+    line-height: 52px;
 }
 
 .installation:hover .btn-group {
@@ -72,10 +73,23 @@ BODY {
     display: block;
 }
 
-.installation .view-mode, .installation .view-mode INPUT,
-.installation .edit-mode, .installation .edit-mode INPUT {
+.installation a.location {
+    display: block;
+    padding-top: 5px;
+    padding-left: 7px;
+
+}
+
+.installation .view-mode, .installation .edit-mode {
     font-size: 36px;
     line-height: 36px;
+    height: 36px;
+}
+
+.installation INPUT, .installation LABEL {
+    font-size: 36px;
+    line-height: 36px;
+    height: 48px;
 }
 
 #footer {

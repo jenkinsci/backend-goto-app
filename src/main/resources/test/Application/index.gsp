@@ -5,6 +5,7 @@
     <% adjunct 'org.kohsuke.stapler.bootstrap-responsive' %>
     <% adjunct 'org.kohsuke.stapler.require' %>
     <% adjunct 'org.kohsuke.stapler.fontawesome' %>
+    <% adjunct 'org.kohsuke.stapler.jqueryui' %>
     <link rel="stylesheet" type="text/css" href="app.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="app.js" type="text/javascript"></script>
