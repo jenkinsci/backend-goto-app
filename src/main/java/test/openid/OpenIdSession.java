@@ -15,16 +15,20 @@ import org.openid4java.message.sreg.SRegResponse;
 import test.User;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 /**
+ * Captures the in-progress OpenID authentication session and its result.
+ *
  * @author Kohsuke Kawaguchi
  */
-public class OpenIdSession {
-    private final ConsumerManager manager;
-    private final DiscoveryInformation endpoint;
-    private String from;
-    private final String finishUrl;
+public class OpenIdSession implements Serializable  {
+    // fake serializable just to make Tomcat happy
+    private transient final ConsumerManager manager;
+    private transient final DiscoveryInformation endpoint;
+    private transient String from;
+    private transient final String finishUrl;
     private String nick;
 
     public OpenIdSession(ConsumerManager manager, String openid, StaplerRequest req) throws OpenIDException, IOException {
@@ -101,4 +105,6 @@ public class OpenIdSession {
     }
 
     public static final AttributeKey<OpenIdSession> KEY = AttributeKey.sessionScoped();
+
+    private static final long serialVersionUID = 1L;
 }
