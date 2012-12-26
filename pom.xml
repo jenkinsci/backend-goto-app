@@ -96,6 +96,14 @@
         <extensions>true</extensions>
       </plugin>
       <plugin>
+        <groupId>com.cloudbees</groupId>
+        <artifactId>bees-maven-plugin</artifactId>
+        <version>1.3.2</version>
+        <configuration>
+          <appid>jenkins/goto</appid>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
         <version>7.6.5.v20120716</version>
