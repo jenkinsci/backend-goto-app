@@ -1,7 +1,7 @@
-package test;
+package org.jenkinsci.backend.go;
 
 import org.kohsuke.stapler.framework.adjunct.AdjunctManager;
-import test.jpa.EntityManagerShell;
+import org.jenkinsci.backend.go.jpa.EntityManagerShell;
 
 import javax.servlet.ServletContext;
 

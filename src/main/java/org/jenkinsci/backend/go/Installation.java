@@ -1,12 +1,10 @@
-package test;
+package org.jenkinsci.backend.go;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
-import test.backbone.Resource;
+import org.jenkinsci.backend.go.backbone.Resource;
 
 import javax.persistence.*;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @author Kohsuke Kawaguchi

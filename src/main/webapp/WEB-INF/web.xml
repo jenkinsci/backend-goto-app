@@ -18,7 +18,7 @@
   </servlet-mapping>
 
   <listener>
-    <listener-class>test.WebAppMain</listener-class>
+    <listener-class>org.jenkinsci.backend.go.WebAppMain</listener-class>
   </listener>
 
   <resource-ref>

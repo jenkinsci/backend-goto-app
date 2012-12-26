@@ -1,4 +1,4 @@
-package test.jpa;
+package org.jenkinsci.backend.go.jpa;
 
 import org.kohsuke.stapler.AttributeKey;
 import org.kohsuke.stapler.Stapler;
@@ -28,7 +28,7 @@ public class EntityManagerShell {
     }
 
     public void doDynamic(StaplerRequest req, StaplerResponse rsp) throws ServletException, IOException {
-        MANAGER_KEY.set(req,this);
+        MANAGER_KEY.set(req, this);
 
         try {
             rsp.forward(delegate,req.getRestOfPath(),req);
@@ -64,7 +64,7 @@ public class EntityManagerShell {
         EntityManager em = KEY.get(req);
         if (em==null) {
             em = MANAGER_KEY.get(req).emf.createEntityManager();
-            KEY.set(req,em);
+            KEY.set(req, em);
 
             EntityTransaction t = em.getTransaction();
             t.begin();

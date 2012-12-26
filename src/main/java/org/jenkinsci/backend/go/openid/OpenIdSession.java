@@ -1,4 +1,4 @@
-package test.openid;
+package org.jenkinsci.backend.go.openid;
 
 import org.kohsuke.stapler.*;
 import org.openid4java.OpenIDException;
@@ -12,7 +12,7 @@ import org.openid4java.message.ParameterList;
 import org.openid4java.message.sreg.SRegMessage;
 import org.openid4java.message.sreg.SRegRequest;
 import org.openid4java.message.sreg.SRegResponse;
-import test.User;
+import org.jenkinsci.backend.go.User;
 
 import java.io.IOException;
 import java.io.Serializable;

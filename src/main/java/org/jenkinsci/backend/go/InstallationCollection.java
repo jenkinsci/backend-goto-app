@@ -1,9 +1,9 @@
-package test;
+package org.jenkinsci.backend.go;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.StaplerRequest;
-import test.backbone.ResourceCollection;
+import org.jenkinsci.backend.go.backbone.ResourceCollection;
 
 import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 /**
  * @author Kohsuke Kawaguchi

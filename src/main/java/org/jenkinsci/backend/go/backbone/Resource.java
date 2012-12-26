@@ -1,11 +1,10 @@
-package test.backbone;
+package org.jenkinsci.backend.go.backbone;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
-import test.InstallationCollection;
 
 import javax.servlet.ServletException;
 import java.io.IOException;

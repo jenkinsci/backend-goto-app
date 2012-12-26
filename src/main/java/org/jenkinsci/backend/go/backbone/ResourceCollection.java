@@ -1,4 +1,4 @@
-package test.backbone;
+package org.jenkinsci.backend.go.backbone;
 
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;

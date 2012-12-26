@@ -1,4 +1,4 @@
-package test.backbone;
+package org.jenkinsci.backend.go.backbone;
 
 import org.apache.commons.io.output.ProxyWriter;
 

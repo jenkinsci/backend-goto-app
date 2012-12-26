@@ -1,9 +1,8 @@
-package test;
+package org.jenkinsci.backend.go;
 
 import org.kohsuke.stapler.AttributeKey;
-import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
-import test.openid.OpenIdSession;
+import org.jenkinsci.backend.go.openid.OpenIdSession;
 
 import java.io.File;
 
@@ -29,7 +28,7 @@ public final class User {
     }
 
     public void associateToRequest(StaplerRequest req) {
-        KEY.set(req,this);
+        KEY.set(req, this);
     }
 
     public static User current() {

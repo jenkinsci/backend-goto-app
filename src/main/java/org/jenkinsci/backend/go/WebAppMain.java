@@ -1,13 +1,11 @@
-package test;
+package org.jenkinsci.backend.go;
 
 import org.kohsuke.stapler.framework.AbstractWebAppMain;
-import test.jpa.EntityManagerShell;
-import test.openid.AuthenticationShell;
+import org.jenkinsci.backend.go.jpa.EntityManagerShell;
+import org.jenkinsci.backend.go.openid.AuthenticationShell;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.servlet.ServletContextEvent;
 
 /**

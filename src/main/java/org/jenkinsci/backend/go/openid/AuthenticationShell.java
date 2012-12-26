@@ -1,4 +1,4 @@
-package test.openid;
+package org.jenkinsci.backend.go.openid;
 
 import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.Stapler;
@@ -9,7 +9,7 @@ import org.openid4java.consumer.ConsumerException;
 import org.openid4java.consumer.ConsumerManager;
 import org.openid4java.consumer.InMemoryConsumerAssociationStore;
 import org.openid4java.consumer.InMemoryNonceVerifier;
-import test.User;
+import org.jenkinsci.backend.go.User;
 
 import java.io.IOException;
 
@@ -56,7 +56,7 @@ public class AuthenticationShell implements StaplerFallback {
         OpenIdSession o = OpenIdSession.KEY.get(req);
         if (o==null)
             try {
-                OpenIdSession.KEY.set(req,o=new OpenIdSession(manager,"http://jenkins-ci.org/account/openid/",req));
+                OpenIdSession.KEY.set(req, o = new OpenIdSession(manager, "http://jenkins-ci.org/account/openid/", req));
             } catch (OpenIDException e) {
                 throw HttpResponses.error(e);
             } catch (IOException e) {
