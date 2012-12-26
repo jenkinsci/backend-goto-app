@@ -1,28 +1,37 @@
 package test;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.StaplerRequest;
 import test.backbone.ResourceCollection;
 
-import java.io.File;
-import java.io.FileFilter;
+import javax.annotation.Nonnull;
+import javax.persistence.EntityManager;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
  * @author Kohsuke Kawaguchi
  */
-public class InstallationCollection extends ResourceCollection<Installation,String> {
-    public final File root;
+public class InstallationCollection extends ResourceCollection<Installation,Integer> {
+    /*package*/ final @Nonnull EntityManager em;
 
-    public InstallationCollection(File root) {
-        this.root = root;
-        root.mkdirs();
+    /**
+     * The user who's collection we are managing.
+     */
+    public final @Nonnull User user;
+
+    /**
+     * All installations that belong to the user. Lazy computed.
+     */
+    private List<Installation> all;
+
+    public InstallationCollection(User user, EntityManager em) {
+        this.em = em;
+        this.user = user;
     }
 
     public ObjectMapper getMapper() {
@@ -31,54 +40,48 @@ public class InstallationCollection extends ResourceCollection<Installation,Stri
 
     @Override
     protected Installation create(StaplerRequest req) throws IOException {
-        Installation inst = objectMapper.readerForUpdating(new Installation(this)).readValue(req.getReader());
-        inst.persist();
+        Installation inst = objectMapper.readValue(req.getReader(),Installation.class);
+        inst.persist(this);
         return inst;
     }
 
     @Override
-    protected Installation get(String id) {
-        File dir = new File(root,id);
-        if (dir.isDirectory())
-            try {
-                return new Installation(this,dir);
-            } catch (IOException e) {
-                LOGGER.log(Level.WARNING, "Failed to load "+dir,e);
-            }
-
-        return null;
+    protected Installation get(Integer id) {
+        Installation i = em.find(Installation.class, id);
+        if (i.belongsTo(user))   return i;
+        return null;    // not users
     }
 
     @Override
-    public void onUpdated(Installation resource) {
-        System.out.println("Updated to " + resource);
+    public void update(Installation resource) {
+        Installation existing = em.find(Installation.class, resource.getId());
+        if (existing==null || !resource.belongsTo(user) || !existing.belongsTo(user)) {
+            em.getTransaction().setRollbackOnly();
+            throw HttpResponses.error(403,new SecurityException("Trying to update a non-existent (or someone else's) resource"));
+        }
+    }
+
+    @Override
+    public void delete(Installation resource) throws IOException {
+        if (!resource.belongsTo(user))
+            throw HttpResponses.error(403,new SecurityException("Trying to delete someone else's resource"));
+        em.remove(resource);
     }
 
     public Iterator<Installation> iterator() {
-        File[] dirs = root.listFiles(new FileFilter() {
-            public boolean accept(File f) {
-                return f.isDirectory();
-            }
-        });
-        List<Installation> installations = new ArrayList<Installation>();
-        if (dirs!=null) {
-            for (File d : dirs) {
-                Installation v = get(d.getName());
-                if (v!=null)
-                    installations.add(v);
-            }
-        }
-        return installations.iterator();
+        if (all==null)
+            all = em.createQuery("FROM Installation where owner='" + user.id + "'", Installation.class).getResultList();
+        return all.iterator();
     }
 
     @Override
-    protected String toID(String token) {
-        if (ID_PATTERN.matcher(token).matches())
-            return token;
-        else
-            return null;    // invalid key
+    protected Integer toID(String token) {
+        try {
+            return Integer.parseInt(token);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     private static final Logger LOGGER = Logger.getLogger(InstallationCollection.class.getName());
-    private static final Pattern ID_PATTERN = Pattern.compile("[0-9a-f]+");
 }

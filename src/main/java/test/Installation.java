@@ -1,40 +1,56 @@
 package test;
 
-import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
 import test.backbone.Resource;
 
+import javax.persistence.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 /**
  * @author Kohsuke Kawaguchi
  */
+@Entity
 public class Installation extends Resource {
     @JsonProperty
-    private transient String id;
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private int id;
+
     @JsonProperty
+    @Column
     private String location;
 
-    private transient final InstallationCollection parent;
+    @Column
+    private String owner;
+
+    public Installation() {
+    }
+
+    public Installation(String location, String owner) {
+        this.location = location;
+        this.owner = owner;
+    }
 
     /**
-     * Loads from existing data on disk.
+     * Creates a new persisted instance.
      */
-    public Installation(InstallationCollection parent, File dir) throws IOException {
-        this(parent);
-        id = dir.getName();
-        parent.getMapper().readerForUpdating(this).readValue(new File(dir, DATA_JSON));
+    public void persist(InstallationCollection parent) {
+        this.owner = parent.user.id;
+        parent.em.persist(this);
     }
 
-    public Installation(InstallationCollection parent) {
-        this.parent = parent;
-    }
-
-    public String getId() {
+    public int getId() {
         return id;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public boolean belongsTo(User owner) {
+        return this.owner.equals(owner.id);
     }
 
     public String getLocation() {
@@ -45,37 +61,9 @@ public class Installation extends Resource {
         this.location = location;
     }
 
-    @Override
-    public String toString() {
-        return "Installation{" +
-                "id=" + id +
-                ", url='" + location + '\'' +
-                '}';
-    }
-
-    @JavaScriptMethod
+    @JavaScriptMethod // testing this functionality. not actually being used.
     public int vote(int x, int y) {
         System.out.println(x+y);
         return x+y;
     }
-
-    public synchronized void persist() throws IOException {
-        if (id==null)
-            id = UUID.randomUUID().toString().replace("-", "");
-
-        File dir = getRootDir();
-        dir.mkdirs();
-        parent.getMapper().writeValue(new File(dir,DATA_JSON),this);
-    }
-
-    private File getRootDir() {
-        return new File(parent.root, id);
-    }
-
-    @Override
-    public void destroy() throws IOException {
-        FileUtils.deleteDirectory(getRootDir());
-    }
-
-    private static final String DATA_JSON = "data.json";
 }

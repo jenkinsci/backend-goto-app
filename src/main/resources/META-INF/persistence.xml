@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
+   <persistence-unit name="to-my-jenkins">
+     <non-jta-data-source>java:comp/env/jdbc/db</non-jta-data-source>
+     <class>test.Installation</class>
+     <properties>
+       <property name="hibernate.hbm2ddl.auto" value="update"/>
+     </properties>
+   </persistence-unit>
+</persistence>

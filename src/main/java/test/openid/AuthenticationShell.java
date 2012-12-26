@@ -15,6 +15,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
+ * Protects the delegated URL-bound object via OpenID.
+ *
+ * <p>
+ * If the current request isn't authenticated, send the browser to OpenID authentication sequence
+ * with https://jenkins-ci.org/
+ *
  * @author Kohsuke Kawaguchi
  */
 public class AuthenticationShell implements StaplerFallback {
@@ -30,10 +36,12 @@ public class AuthenticationShell implements StaplerFallback {
     }
 
     public Object getStaplerFallback() {
-//        User user = currentSession().authenticate();
-//        user.associateToRequest(Stapler.getCurrentRequest());
-
-        new User("kohsuke").associateToRequest(Stapler.getCurrentRequest()); // fake during debug
+        if (Boolean.getBoolean("openID.skip")) {
+            new User("debug").associateToRequest(Stapler.getCurrentRequest()); // fake during debug
+        } else {
+            User user = currentSession().authenticate();
+            user.associateToRequest(Stapler.getCurrentRequest());
+        }
         return delegate;
     }
 

@@ -5,6 +5,7 @@ import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
+import test.InstallationCollection;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -32,18 +33,13 @@ public abstract class Resource implements HttpResponse {
 
     protected HttpResponse _put(StaplerRequest request) throws IOException {
         getMapper(request).readerForUpdating(this).readValue(request.getReader());
-        persist();
-        getParent(request).onUpdated(this);
+        getParent(request).update(this);
         return HttpResponses.ok();
     }
 
-    /**
-     * Persists this object. Called when updated.
-     */
-    protected abstract void persist() throws IOException;
-
     protected HttpResponse _delete(StaplerRequest request) throws IOException {
-        return getParent(request).delete(this);
+        getParent(request).delete(this);
+        return HttpResponses.ok();
     }
 
     public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
@@ -59,6 +55,4 @@ public abstract class Resource implements HttpResponse {
     private ResourceCollection getParent(StaplerRequest req) {
         return req.findAncestorObject(ResourceCollection.class);
     }
-
-    public abstract void destroy() throws IOException;
 }

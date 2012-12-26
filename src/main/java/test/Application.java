@@ -1,6 +1,7 @@
 package test;
 
 import org.kohsuke.stapler.framework.adjunct.AdjunctManager;
+import test.jpa.EntityManagerShell;
 
 import javax.servlet.ServletContext;
 
@@ -15,6 +16,6 @@ public class Application {
     }
 
     public InstallationCollection getInstallations() {
-        return new InstallationCollection(User.current().getRootDir());
+        return new InstallationCollection(User.current(), EntityManagerShell.getCurrentEntityManager());
     }
 }

@@ -99,14 +99,11 @@ public abstract class ResourceCollection<T extends Resource,ID> implements Itera
     /**
      * Called when a resource in this collection is updated.
      */
-    public void onUpdated(T resource) {
+    public void update(T resource) {
     }
 
     /**
      * Called to delete a resource in this collection.
      */
-    public HttpResponse delete(T resource) throws IOException {
-        resource.destroy();
-        return HttpResponses.ok();
-    }
+    public abstract void delete(T resource) throws IOException;
 }
