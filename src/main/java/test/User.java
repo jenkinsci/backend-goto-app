@@ -1,5 +1,6 @@
 package test;
 
+import org.kohsuke.stapler.AttributeKey;
 import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
 import test.openid.OpenIdSession;
@@ -28,12 +29,12 @@ public final class User {
     }
 
     public void associateToRequest(StaplerRequest req) {
-        req.setAttribute(KEY,this);
+        KEY.set(req,this);
     }
 
     public static User current() {
-        return (User)Stapler.getCurrentRequest().getAttribute(KEY);
+        return KEY.get();
     }
 
-    private static final String KEY = User.class.getName();
+    private static final AttributeKey<User> KEY = AttributeKey.requestScoped();
 }

@@ -66,7 +66,7 @@ public class OpenIdSession {
             String url = authReq.getDestinationUrl(true);
 
             // remember this in the session
-            Stapler.getCurrentRequest().getSession().setAttribute(SESSION_NAME,this);
+            KEY.set(this);
 
             throw new HttpRedirect(url);
         } catch (OpenIDException e) {
@@ -100,5 +100,5 @@ public class OpenIdSession {
         return HttpResponses.redirectTo(from);
     }
 
-    private static final String SESSION_NAME = OpenIdSession.class.getName();
+    public static final AttributeKey<OpenIdSession> KEY = AttributeKey.sessionScoped();
 }

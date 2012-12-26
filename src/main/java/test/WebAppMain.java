@@ -32,20 +32,6 @@ public class WebAppMain extends AbstractWebAppMain<Application> {
     @Override
     protected Object createApplication() throws Exception {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("to-my-jenkins");
-//        testDb(emf);
         return new AuthenticationShell(new EntityManagerShell(new Application(context),emf));
-    }
-
-    private void testDb(EntityManagerFactory emf) {
-        Sample s = new Sample();
-        s.field = "xxx"+System.currentTimeMillis();
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(s);
-        em.getTransaction().commit();
-
-        Query q = em.createQuery("FROM test.Sample");
-        for (Object o : q.getResultList())
-            System.out.printf("result=%s\n",o);
     }
 }

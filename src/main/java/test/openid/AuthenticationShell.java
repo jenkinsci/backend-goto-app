@@ -11,7 +11,6 @@ import org.openid4java.consumer.InMemoryConsumerAssociationStore;
 import org.openid4java.consumer.InMemoryNonceVerifier;
 import test.User;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -54,12 +53,10 @@ public class AuthenticationShell implements StaplerFallback {
 
     private OpenIdSession currentSession() {
         StaplerRequest req = Stapler.getCurrentRequest();
-        HttpSession s = req.getSession();
-        String NAME = OpenIdSession.class.getName();
-        OpenIdSession o = (OpenIdSession) s.getAttribute(NAME);
+        OpenIdSession o = OpenIdSession.KEY.get(req);
         if (o==null)
             try {
-                s.setAttribute(NAME,o=new OpenIdSession(manager,"http://jenkins-ci.org/account/openid/",req));
+                OpenIdSession.KEY.set(req,o=new OpenIdSession(manager,"http://jenkins-ci.org/account/openid/",req));
             } catch (OpenIDException e) {
                 throw HttpResponses.error(e);
             } catch (IOException e) {

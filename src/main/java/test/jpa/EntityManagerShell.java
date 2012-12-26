@@ -1,5 +1,6 @@
 package test.jpa;
 
+import org.kohsuke.stapler.AttributeKey;
 import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -27,7 +28,7 @@ public class EntityManagerShell {
     }
 
     public void doDynamic(StaplerRequest req, StaplerResponse rsp) throws ServletException, IOException {
-        req.setAttribute(MANAGER_KEYNAME,this);
+        MANAGER_KEY.set(req,this);
 
         try {
             rsp.forward(delegate,req.getRestOfPath(),req);
@@ -38,7 +39,7 @@ public class EntityManagerShell {
             fail(req);
             throw e;
         } finally {
-            EntityManager em = getOrNull(req);
+            EntityManager em = KEY.get(req);
             if (em!=null) {
                 EntityTransaction t = em.getTransaction();
                 if (t.isActive()) {
@@ -53,18 +54,17 @@ public class EntityManagerShell {
     }
 
     private void fail(StaplerRequest req) {
-        EntityManager em = getOrNull(req);
+        EntityManager em = KEY.get(req);
         if (em!=null)
             em.getTransaction().setRollbackOnly();
     }
 
     public static EntityManager getCurrentEntityManager() {
         StaplerRequest req = Stapler.getCurrentRequest();
-        EntityManager em = getOrNull(req);
+        EntityManager em = KEY.get(req);
         if (em==null) {
-            EntityManagerFactory emf = ((EntityManagerShell)req.getAttribute(MANAGER_KEYNAME)).emf;
-            em = emf.createEntityManager();
-            req.setAttribute(KEYNAME, em);
+            em = MANAGER_KEY.get(req).emf.createEntityManager();
+            KEY.set(req,em);
 
             EntityTransaction t = em.getTransaction();
             t.begin();
@@ -73,10 +73,6 @@ public class EntityManagerShell {
         return em;
     }
 
-    private static EntityManager getOrNull(StaplerRequest req) {
-        return (EntityManager) req.getAttribute(KEYNAME);
-    }
-
-    private static final String MANAGER_KEYNAME = EntityManager.class.getName()+".manager";
-    private static final String KEYNAME = EntityManager.class.getName();
+    private static final AttributeKey<EntityManagerShell> MANAGER_KEY = AttributeKey.requestScoped();
+    private static final AttributeKey<EntityManager> KEY = AttributeKey.requestScoped();
 }
