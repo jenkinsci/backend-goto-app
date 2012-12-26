@@ -61,7 +61,6 @@ public class Installation extends Resource {
 
     @JavaScriptMethod // testing this functionality. not actually being used.
     public int vote(int x, int y) {
-        System.out.println(x+y);
         return x+y;
     }
 }
