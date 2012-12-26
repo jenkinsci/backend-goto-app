@@ -28,6 +28,7 @@ require(['installation','text!/adjuncts/webApp/crumbIssuer/crumb','org/kohsuke/s
         addOne: function(i) {
             var view = new Installation.View({model: i, go:this.go});
             $("#installations").append(view.render().el);
+            $("#no-installations").hide();
 
             // example of calling the vote method on the server-side
             i.vote(1,2,function (r) {

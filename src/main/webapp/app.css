@@ -21,6 +21,16 @@ BODY {
     font-weight: bold;
 }
 
+#no-installations {
+    padding: 4em;
+    text-align: center;
+    color: gray;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 18px;
+}
+
 #installations {
     padding: 0px 16px;
 }
@@ -82,7 +92,7 @@ BODY {
     padding-top: 5px;
     padding-left: 7px;
     white-space: nowrap;
-    height: 99px; /* as long as it's big enough to capture one line */
+    height: 64px; /* as long as it's big enough to capture one line */
     overflow: hidden;
     text-overflow: ellipsis;
 }
