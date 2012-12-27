@@ -1,5 +1,5 @@
-http://goto.jenkins-ci.org/
-===============
+What?
+-----
 
 This application is essentially a redirection switch board to jump
 to a specific URL within everyone's Jenkins instance.
@@ -12,7 +12,7 @@ the browser to the `/manage` URL within Jenkins.
 How?
 ----
 Since everyone's Jenkins installation lives in diffrent URLs and we have
-now way of knowing them, this application asks the user to register
+no way of knowing them, this application asks the user to register
 the locations of their Jenkins installations. And to do this, each user
 gets authenticated with their `jenkins-ci.org` account (via OpenID.)
 
