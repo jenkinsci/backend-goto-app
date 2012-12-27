@@ -49,6 +49,7 @@ public class EntityManagerShell {
                         t.rollback();
                 }
                 em.close();
+                KEY.remove();
             }
         }
     }
