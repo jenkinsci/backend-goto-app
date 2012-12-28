@@ -3,6 +3,7 @@ package org.jenkinsci.backend.go;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
 import org.jenkinsci.backend.go.backbone.Resource;
+import org.kohsuke.stapler.openid.client.OpenIDIdentity;
 
 import javax.persistence.*;
 
@@ -35,7 +36,7 @@ public class Installation extends Resource {
      * Creates a new persisted instance.
      */
     public void persist(InstallationCollection parent) {
-        this.owner = parent.user.id;
+        this.owner = parent.user.getNick();
         parent.em.persist(this);
     }
 
@@ -47,8 +48,8 @@ public class Installation extends Resource {
         return owner;
     }
 
-    public boolean belongsTo(User owner) {
-        return this.owner.equals(owner.id);
+    public boolean belongsTo(OpenIDIdentity owner) {
+        return this.owner.equals(owner.getNick());
     }
 
     public String getLocation() {

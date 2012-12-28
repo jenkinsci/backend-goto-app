@@ -1,8 +1,9 @@
 package org.jenkinsci.backend.go;
 
+import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.framework.AbstractWebAppMain;
 import org.jenkinsci.backend.go.jpa.EntityManagerShell;
-import org.jenkinsci.backend.go.openid.AuthenticationShell;
+import org.kohsuke.stapler.openid.client.AuthenticationShell;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -30,6 +31,14 @@ public class WebAppMain extends AbstractWebAppMain<Application> {
     @Override
     protected Object createApplication() throws Exception {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("to-my-jenkins");
-        return new AuthenticationShell(new EntityManagerShell(new Application(context),emf));
+        Application app = new Application(context);
+        AuthenticationShell shell = new AuthenticationShell(new EntityManagerShell(app, emf)) {
+            @Override
+            protected String getClaimedIdentity(StaplerRequest request) {
+                return "https://jenkins-ci.org/account/openid/";
+            }
+        };
+        app.currentUser = shell.key;
+        return shell;
     }
 }

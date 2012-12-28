@@ -4,6 +4,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.StaplerRequest;
 import org.jenkinsci.backend.go.backbone.ResourceCollection;
+import org.kohsuke.stapler.openid.client.OpenIDIdentity;
 
 import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
@@ -21,14 +22,14 @@ public class InstallationCollection extends ResourceCollection<Installation,Inte
     /**
      * The user who's collection we are managing.
      */
-    public final @Nonnull User user;
+    public final @Nonnull OpenIDIdentity user;
 
     /**
      * All installations that belong to the user. Lazy computed.
      */
     private List<Installation> all;
 
-    public InstallationCollection(User user, EntityManager em) {
+    public InstallationCollection(OpenIDIdentity user, EntityManager em) {
         this.em = em;
         this.user = user;
     }
@@ -69,7 +70,7 @@ public class InstallationCollection extends ResourceCollection<Installation,Inte
 
     public Iterator<Installation> iterator() {
         if (all==null)
-            all = em.createQuery("FROM Installation where owner='" + user.id + "'", Installation.class).getResultList();
+            all = em.createQuery("FROM Installation where owner='" + user.getNick() + "'", Installation.class).getResultList();
         return all.iterator();
     }
 
